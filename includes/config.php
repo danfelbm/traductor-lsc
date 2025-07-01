@@ -8,7 +8,7 @@ if (file_exists(__DIR__ . '/config.local.php')) {
 } else {
     // Configuración de desarrollo/ejemplo - CAMBIAR EN PRODUCCIÓN
     define('GEMINI_API_KEY', 'TU_API_KEY_DE_GEMINI_AQUI');
-    define('GEMINI_API_URL', 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent');
+    define('GEMINI_API_URL', 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent');
     
     define('DB_HOST', 'localhost');
     define('DB_USER', 'tu_usuario_db');
@@ -23,6 +23,10 @@ if (file_exists(__DIR__ . '/config.local.php')) {
     }
 }
 
-// Configuración de la aplicación
-define('MAX_VIDEO_DURATION', 30); // duración máxima en segundos
-define('MAX_FILE_SIZE', 10 * 1024 * 1024); // 10MB máximo 
+// Configuración de la aplicación (solo definir si no existen)
+if (!defined('MAX_VIDEO_DURATION')) {
+    define('MAX_VIDEO_DURATION', 30); // duración máxima en segundos
+}
+if (!defined('MAX_FILE_SIZE')) {
+    define('MAX_FILE_SIZE', 10 * 1024 * 1024); // 10MB máximo
+}

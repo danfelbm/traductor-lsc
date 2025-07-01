@@ -12,6 +12,5 @@ define('DB_USER', 'tu_usuario_db');
 define('DB_PASS', 'tu_contraseña_db');
 define('DB_NAME', 'traductor_lsc');
 
-// Configuración de la aplicación
-define('MAX_VIDEO_DURATION', 30); // duración máxima en segundos
-define('MAX_FILE_SIZE', 10 * 1024 * 1024); // 10MB máximo 
+// NOTA: MAX_VIDEO_DURATION y MAX_FILE_SIZE se definen en config.php
+// No las definas aquí para evitar warnings de constantes duplicadas 

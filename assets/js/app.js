@@ -306,6 +306,14 @@ createApp({
                     body: formData
                 });
 
+                // Primero verificar si la respuesta es JSON válido
+                const contentType = result.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    const text = await result.text();
+                    console.error('Respuesta no JSON:', text);
+                    throw new Error('El servidor no devolvió una respuesta JSON válida. Revisa los logs.');
+                }
+
                 const data = await result.json();
                 if (data.success) {
                     this.traduccion = data.traduccion;
@@ -320,10 +328,20 @@ createApp({
                         }
                     });
                 } else {
-                    throw new Error(data.error);
+                    throw new Error(data.error || 'Error desconocido al procesar el video');
                 }
             } catch (error) {
-                alert('Error al procesar el video. Por favor, intenta de nuevo.');
+                console.error('Error procesando video:', error);
+                // Mostrar el error real en lugar del mensaje genérico
+                if (error.message.includes('config.local.php')) {
+                    alert('Error de configuración: No se encontró el archivo config.local.php. Por favor, configura las credenciales.');
+                } else if (error.message.includes('GEMINI_API_KEY')) {
+                    alert('Error: La API Key de Gemini no está configurada correctamente.');
+                } else if (error.message.includes('fetch')) {
+                    alert('Error de conexión: No se pudo conectar con el servidor.');
+                } else {
+                    alert('Error: ' + error.message);
+                }
             } finally {
                 this.traduciendo = false;
             }

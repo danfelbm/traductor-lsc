@@ -319,4 +319,52 @@
   - Estados visuales más claros durante todo el proceso.
   - Reducción de confusión al mostrar solo los elementos relevantes en cada etapa.
 
+## [1.2.1] - Corrección de Error de Configuración (2024-01-20)
+
+### 🛠 Corregido
+- **Error "Error al procesar el video"**: 
+  - Mejorado el manejo de errores para mostrar mensajes específicos
+  - Agregada validación de credenciales antes de procesar
+  - Detección automática de configuración faltante
+
+### 🔍 Diagnóstico Agregado
+- **Script de Verificación**: `verificar_config.php`
+  - Verifica existencia de `config.local.php`
+  - Valida todas las credenciales
+  - Prueba la conexión con API de Gemini
+  - Muestra últimas líneas del log de errores
+
+### 📝 Mejoras en Manejo de Errores
+- **Frontend (app.js)**:
+  - Mensajes de error específicos según el problema
+  - Detección de respuestas no-JSON del servidor
+  - Logging en consola para debugging
+
+- **Backend (procesar_video.php)**:
+  - Validación de API Key antes de procesar
+  - Supresión de avisos de configuración en contexto AJAX
+  - Mensajes de error más descriptivos
+
+## [1.2.2] - Corrección de Error JSON (2024-01-20)
+
+### 🛠 Corregido
+- **Error "Unexpected token '<'"**: 
+  - Eliminadas constantes duplicadas en `config.local.php` que causaban warnings PHP
+  - Implementado output buffering en `procesar_video.php` para evitar que warnings corrompan el JSON
+  - Agregada lógica condicional en `config.php` para evitar redefinición de constantes
+
+### 📝 Mejoras Técnicas
+- **Output Buffering**: 
+  - `ob_start()` al inicio para capturar cualquier output no deseado
+  - `ob_clean()` después de cargar configuración
+  - `ob_end_clean()` antes de enviar respuestas JSON
+- **Prevención de Warnings**:
+  - Verificación con `!defined()` antes de definir constantes
+  - `display_errors` desactivado en procesar_video.php
+
+### 📚 Archivos Actualizados
+- `config.example.php`: Removidas constantes duplicadas con nota explicativa
+- `procesar_video.php`: Implementado manejo robusto de output
+- `includes/config.php`: Agregada verificación antes de definir constantes
+
 --- 

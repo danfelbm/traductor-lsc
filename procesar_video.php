@@ -1,7 +1,10 @@
 <?php
-// Configurar logging de errores
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
+// Iniciar output buffering para capturar cualquier warning
+ob_start();
+
+// Configurar logging de errores - silencioso en producción
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
 error_reporting(E_ALL);
 
 // Crear archivo de log si no existe
@@ -16,13 +19,24 @@ function logError($message) {
     error_log($logMessage, 3, $logFile);
 }
 
+// Suprimir avisos de configuración en este contexto
+define('SUPPRESS_CONFIG_WARNING', true);
+
 require_once 'includes/config.php';
 require_once 'includes/database.php';
+
+// Limpiar cualquier output que haya ocurrido hasta ahora
+ob_clean();
 
 header('Content-Type: application/json');
 
 try {
     logError("Iniciando procesamiento de video");
+    
+    // Verificar que las credenciales estén configuradas
+    if (!defined('GEMINI_API_KEY') || GEMINI_API_KEY === 'TU_API_KEY_DE_GEMINI_AQUI') {
+        throw new Exception('La API Key de Gemini no está configurada. Por favor, crea el archivo includes/config.local.php con tus credenciales.');
+    }
     
     // Verificar si se recibió un archivo de video
     if (!isset($_FILES['video']) || $_FILES['video']['error'] !== UPLOAD_ERR_OK) {
@@ -161,6 +175,9 @@ try {
     
     logError("Traducción guardada en base de datos");
 
+    // Limpiar cualquier output previo antes de enviar JSON
+    ob_end_clean();
+    
     // Devolver respuesta exitosa
     echo json_encode([
         'success' => true,
@@ -171,6 +188,9 @@ try {
     // Log del error
     logError("ERROR: " . $e->getMessage());
     logError("Stack trace: " . $e->getTraceAsString());
+    
+    // Limpiar cualquier output previo antes de enviar JSON
+    ob_end_clean();
     
     // Devolver error
     http_response_code(500);
