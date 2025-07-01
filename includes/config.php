@@ -8,7 +8,8 @@ if (file_exists(__DIR__ . '/config.local.php')) {
 } else {
     // Configuración de desarrollo/ejemplo - CAMBIAR EN PRODUCCIÓN
     define('GEMINI_API_KEY', 'TU_API_KEY_DE_GEMINI_AQUI');
-    define('GEMINI_API_URL', 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent');
+    define('GEMINI_API_URL', 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent');
+    define('GEMINI_MODEL', 'gemini-2.5-pro');
     
     define('DB_HOST', 'localhost');
     define('DB_USER', 'tu_usuario_db');

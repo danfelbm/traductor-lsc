@@ -386,4 +386,24 @@
 - ✅ Configuración segura con archivos locales
 - ✅ Documentación completa
 
+## [1.3.1] - 2025-01-01
+
+### Corregido
+- **Compatibilidad con Gemini 2.5 Pro**: 
+  - Implementado `systemInstruction` para forzar comportamiento correcto del modelo
+  - Reducida temperatura a 0.3 para respuestas más consistentes
+  - Eliminado límite de tokens para permitir respuestas completas
+  - Añadido manejo robusto de diferentes formatos de respuesta
+  - Implementada extracción de texto cuando el modelo devuelve formato de visión por computadora
+  - Mejorado manejo de errores MAX_TOKENS con mensaje descriptivo al usuario
+- **Logging mejorado**: Añadidos logs más detallados para debugging de respuestas de API
+- **Configuración**: Añadida constante GEMINI_MODEL para identificar el modelo en uso
+
+### Técnico
+- Actualizado `procesar_video.php` con mejor procesamiento de respuestas de Gemini 2.5 Pro
+- Implementada limpieza automática de respuestas JSON no deseadas
+- Añadida validación para detectar y manejar múltiples formatos de respuesta de la API
+- Eliminados límites de `maxOutputTokens` y `candidateCount` para evitar truncamiento de respuestas
+- **Solución definitiva**: Uso de `systemInstruction` en lugar de prompt en `contents` para evitar que Gemini 2.5 Pro devuelva respuestas en formato de detección de objetos
+
 --- 

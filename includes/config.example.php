@@ -4,7 +4,8 @@
 
 // Configuración de la API Gemini
 define('GEMINI_API_KEY', 'TU_API_KEY_DE_GEMINI_AQUI');
-define('GEMINI_API_URL', 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent');
+define('GEMINI_API_URL', 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent');
+define('GEMINI_MODEL', 'gemini-2.5-pro');
 
 // Configuración de la base de datos
 define('DB_HOST', 'localhost');

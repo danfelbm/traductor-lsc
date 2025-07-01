@@ -71,40 +71,21 @@ try {
 
     // Preparar la solicitud a la API Gemini
     $apiUrl = GEMINI_API_URL . '?key=' . GEMINI_API_KEY;
+    
+    // Prompt más específico para evitar respuestas de detección de objetos
     $requestData = [
+        'systemInstruction' => [
+            'parts' => [
+                [
+                    'text' => 'Eres un intérprete profesional de Lengua de Señas Colombiana (LSC). Tu ÚNICA función es traducir las señas de LSC al español. NUNCA uses formato JSON, NUNCA describas el video, NUNCA respondas en inglés. Solo traduce las señas al español o di "No se detectaron señas de LSC en el video".'
+                ]
+            ]
+        ],
         'contents' => [
             [
                 'parts' => [
                     [
-                        'text' => '
-                            Eres un experto traductor de Lenguaje de Señas Colombiano (LSC). Tu tarea es analizar este video y traducir con precisión las señas realizadas.
-
-                            **INSTRUCCIONES DE ANÁLISIS:**
-
-                            1. **Enfócate principalmente en las manos:** Observa cuidadosamente la forma, posición y movimiento de ambas manos y dedos.
-
-                            2. **Elementos clave a analizar:**
-                            - Configuración de las manos (forma que adoptan los dedos)
-                            - Orientación de las palmas y dorsos
-                            - Ubicación espacial de las manos (en relación al cuerpo, cara, espacio neutro)
-                            - Movimiento de las manos (direccional, circular, repetitivo, etc.)
-                            - Expresión facial y movimientos corporales que complementen el mensaje
-                            - Secuencia temporal de las señas
-
-                            3. **Consideraciones específicas del LSC:**
-                            - Ten en cuenta las variaciones regionales colombianas
-                            - Identifica clasificadores y señas descriptivas
-                            - Reconoce la estructura gramatical propia del LSC
-                            - Considera el contexto cultural colombiano en las expresiones
-
-                            4. **Proceso de traducción:**
-                            - Identifica cada seña individual en secuencia
-                            - Determina el significado de señas compuestas o frases
-                            - Construye el mensaje completo respetando la sintaxis del español
-                            - Asegúrate de que la traducción sea natural y coherente
-
-                            **Responde SOLO con la traducción, en ESPAÑOL, sin explicaciones adicionales.**
-                        '
+                        'text' => 'Traduce las señas de este video al español:'
                     ],
                     [
                         'inline_data' => [
@@ -116,10 +97,11 @@ try {
             ]
         ],
         'generationConfig' => [
-            'temperature' => 0.4,
+            'temperature' => 0.3,      // Más bajo para respuestas más consistentes
             'topK' => 40,
             'topP' => 0.95,
-            'maxOutputTokens' => 256
+            // 'maxOutputTokens' => 512,  // Comentado para no limitar la respuesta
+            // 'candidateCount' => 1      // Comentado - valor por defecto
         ]
     ];
 
@@ -158,12 +140,39 @@ try {
         throw new Exception('Error al decodificar la respuesta JSON.');
     }
     
-    if (!isset($result['candidates'][0]['content']['parts'][0]['text'])) {
+    // Manejo más robusto de la respuesta
+    $traduccion = null;
+    
+    // Verificar estructura estándar
+    if (isset($result['candidates'][0]['content']['parts'][0]['text'])) {
+        $traduccion = trim($result['candidates'][0]['content']['parts'][0]['text']);
+    }
+    // Verificar si es respuesta con role pero sin parts (MAX_TOKENS)
+    else if (isset($result['candidates'][0]['finishReason']) && 
+             $result['candidates'][0]['finishReason'] === 'MAX_TOKENS') {
+        logError("Respuesta cortada por MAX_TOKENS");
+        logError("Respuesta completa: " . print_r($result, true));
+        throw new Exception('La respuesta fue cortada. Por favor, graba un video más corto.');
+    }
+    else {
         logError("Estructura de respuesta inesperada: " . print_r($result, true));
         throw new Exception('Formato de respuesta inesperado de la API.');
     }
-
-    $traduccion = trim($result['candidates'][0]['content']['parts'][0]['text']);
+    
+    // Limpiar la traducción de posibles formatos JSON
+    if (strpos($traduccion, '```json') !== false || 
+        strpos($traduccion, '[{') !== false ||
+        strpos($traduccion, '"box_2d"') !== false) {
+        logError("Respuesta contiene formato JSON no deseado: $traduccion");
+        
+        // Intentar extraer solo el texto relevante
+        if (preg_match('/"label":\s*"([^"]+)"/', $traduccion, $matches)) {
+            $traduccion = $matches[1];
+        } else {
+            throw new Exception('El modelo devolvió un formato de detección de objetos en lugar de traducción. Por favor, intenta de nuevo.');
+        }
+    }
+    
     logError("Traducción obtenida: $traduccion");
 
     // Guardar en la base de datos
