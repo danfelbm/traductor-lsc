@@ -1,0 +1,23 @@
+# Logs
+error.log
+*.log
+
+# Archivos de configuración local
+config.local.php
+
+# Archivos subidos
+uploads/videos/*
+!uploads/videos/.gitkeep
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Archivos temporales
+*.tmp
+*.temp
+*.cache 
