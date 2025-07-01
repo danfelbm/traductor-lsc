@@ -36,8 +36,8 @@ traductor_lsc/
 
 ### Configuración API Gemini
 ```php
-define('GEMINI_API_KEY', 'AIzaSyDtSmBUq-yvjNbNqA2Rf9T5VASzNUbVSrc');
-define('GEMINI_API_URL', 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent');
+define('GEMINI_API_KEY', 'TU_API_KEY_AQUI');
+define('GEMINI_API_URL', 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent');
 ```
 
 ### Dependencias CDN
