@@ -367,4 +367,23 @@
 - `procesar_video.php`: Implementado manejo robusto de output
 - `includes/config.php`: Agregada verificación antes de definir constantes
 
+## [1.3.0] - Actualización Completa y Subida a GitHub (2024-01-20)
+
+### 🚀 Subido a GitHub
+- **Commit**: `884b920` - feat: Mejoras de UX, corrección de errores y actualización de modelo Gemini
+- **Repositorio**: https://github.com/danfelbm/traductor-lsc
+- **Estado**: Completamente sincronizado y funcional
+
+### 🔄 Actualización de Modelo
+- **Gemini 2.5 Flash**: Actualizado de `gemini-1.5-flash` a `gemini-2.5-flash`
+- **Nueva API Key**: Configurada y funcionando correctamente
+
+### 📦 Resumen de Características Incluidas
+- ✅ Hand tracking automático con MediaPipe
+- ✅ Interfaz mejorada con Material Design 3
+- ✅ Manejo robusto de errores
+- ✅ Sistema de logging completo
+- ✅ Configuración segura con archivos locales
+- ✅ Documentación completa
+
 --- 
