@@ -272,6 +272,26 @@
   - Verificación de que el video stream esté listo antes de activar.
   - Agregado selfieMode para evitar problemas con el flip de la imagen.
 
+## [1.2.0] - Preparación para GitHub y Seguridad (2024-01-20)
+
+### 🔒 Seguridad Implementada
+- **Credenciales Protegidas**: Movidas todas las credenciales sensibles a `config.local.php` (no incluido en Git)
+- **Configuración Segura**: Creado sistema de configuración que carga credenciales de archivo local
+- **Documentación Limpia**: Eliminadas credenciales de API y base de datos de todos los archivos públicos
+- **Template de Configuración**: Creado `config.example.php` como plantilla para nuevos desarrolladores
+
+### 📚 Documentación
+- **README Completo**: Creado README.md con instrucciones detalladas de instalación y uso
+- **Guía de Configuración**: Instrucciones paso a paso para obtener API Keys y configurar el proyecto
+- **Estructura del Proyecto**: Documentación clara de la arquitectura y archivos
+- **Solución de Problemas**: Guía de troubleshooting para errores comunes
+
+### 🚀 Preparación para GitHub
+- **Repositorio Git**: Inicializado con commits organizados y descriptivos
+- **Archivos Protegidos**: .gitignore actualizado para proteger información sensible
+- **Documentación de Contribución**: Instrucciones para colaboradores
+- **Licencia**: Preparado para licencia MIT
+
 ## [1.1.0] - Mejoras de Experiencia de Usuario
 
 ### Agregado
